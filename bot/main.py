@@ -8,6 +8,12 @@ from discord.ext import commands
 bot = commands.Bot(command_prefix="!")
 TOKEN = os.getenv("TOKEN")
 
+extensions = ['cogs.games.RockPaperScissors']
+
+if __name__ == '__main__':
+    for extension in extensions:
+        client.load_extension(extension)
+
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user.name}({bot.user.id})")
