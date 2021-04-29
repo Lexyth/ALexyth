@@ -11,8 +11,8 @@ TOKEN = os.getenv("TOKEN")
 extensions = ['cogs.games.RockPaperScissors']
 
 if __name__ == '__main__':
-    for extension in extensions:
-        client.load_extension(extension)
+  for extension in extensions:
+    bot.load_extension(extension)
 
 @bot.event
 async def on_ready():
