@@ -20,11 +20,11 @@ class RockPaperScissors(Cog):
       user = choice
     enemy = random.randint(0,2);
     if user == enemy:
-      print(f"Tie on {choices[user]}\n")
+      await ctx.send(f"Tie on {choices[user]}")
     elif choices[user] == choices[enemy-1]:
-      print(f"{choices[user]} beats {choices[enemy]}: User wins!\n")
+      await ctx.send(f"{choices[user]} beats {choices[enemy]}: User wins!")
     else :
-      print(f"{choices[enemy]} beats {choices[user]}: Enemy wins!\n")
+      await ctx.send(f"{choices[enemy]} beats {choices[user]}: Enemy wins!")
 
 def setup(bot: Bot) -> None:
   bot.add_cog(RockPaperScissors(bot))
