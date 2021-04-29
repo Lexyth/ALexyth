@@ -13,7 +13,7 @@ async def on_ready():
     print(f"Logged in as {bot.user.name}({bot.user.id})")
 
 @bot.command()
-@dm_only()
+@commands.dm_only()
 async def ping(ctx):
     await ctx.send("pong")
 
