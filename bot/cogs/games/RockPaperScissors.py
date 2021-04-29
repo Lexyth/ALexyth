@@ -3,13 +3,12 @@ import random
 
 class RockPaperScissors(Cog):
   
-  choices = ['scissors', 'paper', 'rock']
-  
   def __init__(self, bot : Bot):
     self.bot = bot
 
   @command(name = 'playRockPaperScissors', aliases = ['playRPS'])
   async def play(self, ctx, choice) -> None:
+    choices = ['scissors', 'paper', 'rock']
     user = 0
     if isinstance(choice, str):
       if choice not in choices:
