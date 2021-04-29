@@ -14,8 +14,13 @@ async def on_ready():
 
 @bot.command()
 @commands.dm_only()
-async def ping(ctx):
-    await ctx.send("pong")
+async def dm_ping(ctx):
+    await ctx.send("Private pong")
+
+@bot.command(name = "ping")
+@commands.guild_only()
+async def guild_ping(ctx):
+    await ctx.send("Public pong")
 
 server.server()
 bot.run(TOKEN)
