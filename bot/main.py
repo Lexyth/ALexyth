@@ -6,7 +6,7 @@ import server
 from discord.ext import commands
 
 bot = commands.Bot(command_prefix="!")
-TOKEN = os.getenv("DISCORD_TOKEN")
+TOKEN = os.getenv("TOKEN")
 
 @bot.event
 async def on_ready():
