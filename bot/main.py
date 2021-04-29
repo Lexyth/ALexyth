@@ -12,7 +12,7 @@ TOKEN = os.getenv("TOKEN")
 async def on_ready():
     print(f"Logged in as {bot.user.name}({bot.user.id})")
 
-@bot.command()
+@bot.command(name = "dm ping", aliases = ['ping'])
 @commands.dm_only()
 async def dm_ping(ctx):
     await ctx.send("Private pong")
