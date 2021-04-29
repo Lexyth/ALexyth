@@ -1,4 +1,4 @@
-from discord.ext.commands import Bot, Cog, Command
+from discord.ext.commands import Bot, Cog, command
 import random
 
 class RockPaperScissors(Cog):
