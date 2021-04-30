@@ -25,7 +25,7 @@ async def on_ready():
     print(f"Logged in as {bot.user.name}({bot.user.id})")
     cur = conn.cursor()
     cur.execute("CREATE TABLE test (id serial PRIMARY KEY, num integer, data varchar);")
-    cur.execute("INSERT INTO test (num, data) VALUES (%s, %s)",(100, "abcdef")
+    cur.execute("INSERT INTO test (num, data) VALUES (%s, %s)",(100, "abcdef"))
     cur.execute("SELECT * FROM test;")
     print(cur.fetchone())
 
