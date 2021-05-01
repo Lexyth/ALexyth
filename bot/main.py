@@ -26,7 +26,7 @@ async def on_ready():
     print("Connection established")
     await conn.execute("CREATE TABLE IF NOT EXISTS LeaderboardRockPaperScissors (id INTEGER, username text, score INTEGER, time TIMESTAMP);")
     print("Created table")
-    await conn.execute("INSERT INTO LeaderboardRockPaperScissors (id, username, score, time) VALUES ($1, $2, $3, $4)",(100000001, "Me", 57, datetime.datetime.now()))
+    await conn.execute("INSERT INTO LeaderboardRockPaperScissors (id, username, score, time) VALUES ($1, $2, $3, $4);",(100000001, "Me", 57, datetime.datetime.now()))
     print("Inserted data")
     print("Result")
     print(await conn.fetch("SELECT * FROM LeaderboardRockPaperScissors;"))
