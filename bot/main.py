@@ -5,12 +5,10 @@ import os
 import server
 from discord.ext import commands
 
-import psycopg2
+import asyncpg
 import datetime
 
 DATABASE_URL = os.environ['DATABASE_URL']
-
-conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 bot = commands.Bot(command_prefix="!")
 TOKEN = os.getenv("TOKEN")
@@ -24,12 +22,10 @@ if __name__ == '__main__':
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user.name}({bot.user.id})")
-    cur = conn.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS LeaderboardRockPaperScissors (id INTEGER, username VARCHAR, score INTEGER, time TIMESTAMP);")
-    cur.execute("INSERT INTO LeaderboardRockPaperScissors (id, username, score, time) VALUES (%s, %s, %s, %s)",(100000001, "Me", 57, datetime.datetime.now()))
-    cur.execute("SELECT * FROM LeaderboardRockPaperScissors;")
-    print(cur.fetchall())
-    cur.close()
+    conn = await asyncpg.connect(DATABASE_URL, ssl='require')
+    await conn.execute("CREATE TABLE IF NOT EXISTS LeaderboardRockPaperScissors (id INTEGER, username VARCHAR, score INTEGER, time TIMESTAMP);")
+    await conn.execute("INSERT INTO LeaderboardRockPaperScissors (id, username, score, time) VALUES (%s, %s, %s, %s)",(100000001, "Me", 57, datetime.now()))
+    print(await conn.fetch("SELECT * FROM LeaderboardRockPaperScissors;")
     conn.close()
 
 @bot.command(name = "dm ping", aliases = ['dmping'])
