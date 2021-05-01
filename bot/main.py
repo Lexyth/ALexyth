@@ -26,7 +26,7 @@ async def on_ready():
     await conn.execute("CREATE TABLE IF NOT EXISTS LeaderboardRockPaperScissors (id INTEGER, username VARCHAR, score INTEGER, time TIMESTAMP);")
     await conn.execute("INSERT INTO LeaderboardRockPaperScissors (id, username, score, time) VALUES (%s, %s, %s, %s)",(100000001, "Me", 57, datetime.now()))
     print(await conn.fetch("SELECT * FROM LeaderboardRockPaperScissors;")
-    conn.close()
+    await conn.close()
 
 @bot.command(name = "dm ping", aliases = ['dmping'])
 @commands.dm_only()
