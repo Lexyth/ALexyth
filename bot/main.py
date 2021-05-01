@@ -27,7 +27,7 @@ async def on_ready():
     cur.execute("CREATE TABLE IF NOT EXISTS test (id serial PRIMARY KEY, num integer, data varchar);")
     cur.execute("INSERT INTO test (num, data) VALUES (%s, %s)",(100, "abcdef"))
     cur.execute("SELECT * FROM test;")
-    print(cur.fetchone())
+    print(cur.fetchall())
 
 @bot.command(name = "dm ping", aliases = ['dmping'])
 @commands.dm_only()
