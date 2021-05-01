@@ -6,6 +6,7 @@ import server
 from discord.ext import commands
 
 import psycopg2
+import datetime
 
 DATABASE_URL = os.environ['DATABASE_URL']
 
@@ -24,10 +25,12 @@ if __name__ == '__main__':
 async def on_ready():
     print(f"Logged in as {bot.user.name}({bot.user.id})")
     cur = conn.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS test (id serial PRIMARY KEY, num integer, data varchar);")
-    cur.execute("INSERT INTO test (num, data) VALUES (%s, %s)",(100, "abcdef"))
-    cur.execute("SELECT * FROM test;")
+    cur.execute("CREATE TABLE IF NOT EXISTS LeaderboardRockPaperScissors (id INTEGER, username VARCHAR, score INTEGER, time TIMESTAMP);")
+    cur.execute("INSERT INTO LeaderboardRockPaperScissors (id, username, score, time) VALUES (%s, %s, %s, %s)",(100000001, "Me", 57, datetime.datetime.now()))
+    cur.execute("SELECT * FROM LeaderboardRockPaperScissors;")
     print(cur.fetchall())
+    cur.close()
+    conn.close()
 
 @bot.command(name = "dm ping", aliases = ['dmping'])
 @commands.dm_only()
