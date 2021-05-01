@@ -24,7 +24,7 @@ async def on_ready():
     print(f"Logged in as {bot.user.name}({bot.user.id})")
     conn = await asyncpg.connect(DATABASE_URL, ssl='require')
     await conn.execute("CREATE TABLE IF NOT EXISTS LeaderboardRockPaperScissors (id INTEGER, username VARCHAR, score INTEGER, time TIMESTAMP);")
-    await conn.execute("INSERT INTO LeaderboardRockPaperScissors (id, username, score, time) VALUES (%s, %s, %s, %s)",(100000001, "Me", 57, datetime.now()))
+    await conn.execute("INSERT INTO LeaderboardRockPaperScissors (id, username, score, time) VALUES (%s, %s, %s, %s)",(100000001, "Me", 57, datetime.datetime.now()))
     print(await conn.fetch("SELECT * FROM LeaderboardRockPaperScissors;"))
     await conn.close()
 
