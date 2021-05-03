@@ -1,3 +1,4 @@
+from discord.ext import commands
 from discord.ext.commands import Bot, Cog, command
 import random
 
@@ -5,50 +6,60 @@ import database as db
 
 class RockPaperScissors(Cog):
   
+  
+  choices = ['scissors', 'paper', 'rock']
+  
+  
   def __init__(self, bot : Bot):
     self.bot = bot
-
-  @command(name = 'playRockPaperScissors', aliases = ['playRPS'])
+  
+  
+  @commands.command(name = 'RPSplay')
   async def play(self, ctx, choice) -> None:
-    choices = ['scissors', 'paper', 'rock']
-    user = 0
+    user_idx = 0
+    choice = choice.lower()
     if isinstance(choice, str):
-      if choice not in choices:
-        await ctx.send("Invalid input")
+      if choice not in self.choices:
+        await ctx.send(f"Please choose one of the following:\n{chr(10).join([f'{i+1}: {self.choices[i].capitalize()}' for i in range(len(self.choices))])}")
         return
-      user = choices.index(choice)
+      user_idx = self.choices.index(choice)
     elif isinstance(choice, int):
-      user = choice
-    enemy = random.randint(0,2);
-    if user == enemy:
-      await ctx.send(f"Tie on {choices[user]}")
-    elif choices[user] == choices[enemy-1]:
-      await ctx.send(f"{choices[user]} beats {choices[enemy]}: User wins!")
+      if choice > 0 and choice <= len(self.choices):
+        user = choice-1
+      else:
+        await ctx.send(f"Please choose one of the following:\n{chr(10).join([f'{i+1}: {self.choices[i].capitalize()}' for i in range(len(self.choices))])}")
+    enemy_idx = random.randint(0,len(self.choices));
+    
+    user_choice = self.choices[user_idx].capitalize()
+    enemy_choice = self.choices[enemy_idx].capitalize()
+    
+    if self.choices[user_idx] == self.choices[enemy_idx-1]:
+      await ctx.send(f"{ctx.author.name} chose {user_choice}\nALexyth chose {enemy_choice}\n\n{user_choice} beats {enemy_choice}\nCongratulations! {ctx.author.name} won!")
+      await self.record(ctx)
+    elif self.choices[enemy_idx] == self.choices[user_idx-1]:
+      await ctx.send(f"{ctx.author.name} chose {user_choice}\nALexyth chose {enemy_choice}\n\n{enemy_choice} beats {user_choice}\nALexyth won!")
     else :
-      await ctx.send(f"{choices[enemy]} beats {choices[user]}: Enemy wins!")
-    await self.record(ctx)
+      await ctx.send(f"{ctx.author.name} chose {user_choice}\nALexyth chose {enemy_choice}\n\nTie on {user_choice}")
+  
+  
+  @play.error
+  async def play_error(self, ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+      await ctx.send(f"Please choose one of the following:\n{chr(10).join([f'{i+1}: {self.choices[i].capitalize()}' for i in range(len(self.choices))])}")
+  
   
   async def record(self, ctx):
-    conn = await db.connect()
-    await conn.execute("INSERT INTO LeaderboardRockPaperScissors (id, username, score, time) VALUES ($1, $2, $3, CURRENT_TIMESTAMP) ON CONFLICT (id) DO UPDATE SET score = LeaderboardRockPaperScissors.score+EXCLUDED.score;",ctx.author.id, ctx.author.name, 1)
-    print("Inserted data")
-    print("Result")
-    print(await conn.fetch("SELECT * FROM LeaderboardRockPaperScissors;"))
-    print("Closing connection")
-    await conn.close()
-    print("Connection closed")
+    await db.execute("INSERT INTO LeaderboardRockPaperScissors (id, username, score, time) VALUES ($1, $2, $3, CURRENT_TIMESTAMP) ON CONFLICT (id) DO UPDATE SET score = LeaderboardRockPaperScissors.score+EXCLUDED.score;",ctx.author.id, ctx.author.name, 1)
   
-  @command(aliases = ['lbRPS'])
+  
+  @commands.command(name = 'RPSleaderboard', aliases = ['RPSlb', 'RPSrank'])
   async def leaderboard(self, ctx):
-    conn = await db.connect()
-    records = await conn.fetch("SELECT * FROM LeaderboardRockPaperScissors;")
+    records = await db.fetch("SELECT * FROM LeaderboardRockPaperScissors;")
     lb = ""
-    print("Leaderboard: Records collected")
     for record in records:
       lb+=f"Name: {record['username']} Score: {record['score']} Time: {record['time']}\n"
-    print("Leaderboard: Records combined")
     await ctx.send(lb)
-    print("Leaderboard: Records sent")
+
 
 def setup(bot: Bot) -> None:
   bot.add_cog(RockPaperScissors(bot))
