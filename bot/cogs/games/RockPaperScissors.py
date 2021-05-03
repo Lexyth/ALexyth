@@ -43,9 +43,12 @@ class RockPaperScissors(Cog):
     conn = await db.connect()
     records = await conn.fetch("SELECT * FROM LeaderboardRockPaperScissors;")
     lb = ""
+    print("Leaderboard: Records collected")
     for record in records:
       lb+=f"Name: {record['username']} Score: {record['score']} Time: {record['time']}\n"
+    print("Leaderboard: Records combined")
     await ctx.send(lb)
+    print("Leaderboard: Records sent")
 
 def setup(bot: Bot) -> None:
   bot.add_cog(RockPaperScissors(bot))
